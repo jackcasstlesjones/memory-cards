@@ -7,7 +7,9 @@ import "./App.css";
 function App() {
   const [gifSrc, setGifSrc] = useState("");
 
-  const [numClicks, setNumClick] = useState(0);
+  const [numClicks, setNumClicks] = useState(0);
+
+  const [highScore, setHighScore] = useState(0);
 
   const [clickedPics, setClickedPics] = useState([]);
 
@@ -16,8 +18,11 @@ function App() {
     console.log(clickedPics);
     if (clickedPics.includes(thisID)) {
       alert("You Lose!!!");
+      setHighScore(numClicks);
+      setNumClicks(-1);
+      setClickedPics([]);
     }
-    setNumClick((prevCount) => prevCount + 1);
+    setNumClicks((prevCount) => prevCount + 1);
   };
 
   function shuffle(array) {
@@ -63,6 +68,7 @@ function App() {
   return (
     <>
       <h1>Current Score: {numClicks}</h1>
+      <h1>High Score: {highScore}</h1>
       <div className="dog-container">
         {gifSrc.length > 0 &&
           gifSrc.map((gif) => {
