@@ -18,11 +18,12 @@ function App() {
     console.log(clickedPics);
     if (clickedPics.includes(thisID)) {
       alert("You Lose!!!");
-      setHighScore(numClicks);
-      setNumClicks(-1);
+      setNumClicks(0);
       setClickedPics([]);
-    }
-    setNumClicks((prevCount) => prevCount + 1);
+      if (numClicks > highScore) {
+        setHighScore(numClicks);
+      }
+    } else setNumClicks((prevCount) => prevCount + 1);
   };
 
   function shuffle(array) {
@@ -67,8 +68,10 @@ function App() {
 
   return (
     <>
-      <h1>Current Score: {numClicks}</h1>
-      <h1>High Score: {highScore}</h1>
+      <div className="score-container">
+        <h1>Current Score: {numClicks}</h1>
+        <h1>High Score: {highScore}</h1>
+      </div>
       <div className="dog-container">
         {gifSrc.length > 0 &&
           gifSrc.map((gif) => {
