@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import apiKey from "./apikey";
+import uuid from "react-uuid";
+
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [dogSrc, setDogSrc] = useState("");
+
+  const searchTerm = "dogs";
+  useEffect(() => {
+    const getData = async () => {
+      const myData = await fetch(
+        `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${searchTerm}&limit=12`,
+        { mode: "cors" }
+      );
+
+      const goodData = await myData.json();
+      setDogSrc(goodData.data);
+      console.log(dogSrc);
+    };
+
+    getData();
+    return () => {
+      setDogSrc("");
+    };
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="dog-container">
+        {dogSrc.length > 0 &&
+          dogSrc.map((gif) => {
+            return <img id="poo" key={"poo"} src={gif.images.original.url} />;
+          })}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
